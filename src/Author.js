@@ -24,7 +24,7 @@ export default function Author(props) {
   return (
     <>
       <div className="data-box">
-        <h3>Data for Author <LocationNote location={'Author.js:<Author>'} /></h3>
+        <h3>Data for Author <LocationNote /></h3>
         <pre>{stringifyRelayData(data)}</pre>
         
       </div>

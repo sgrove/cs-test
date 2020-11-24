@@ -28,7 +28,7 @@ export default function Comment(props) {
   return (
     <>
       <div className="data-box">
-        <h3>Data for Comment <LocationNote location={'Comment.js:<Comment>'} /></h3>
+        <h3>Data for Comment <LocationNote /></h3>
         <pre>{stringifyRelayData(data)}</pre>
         <h4>AuthorUses</h4>
         {authorUses}

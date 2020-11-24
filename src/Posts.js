@@ -166,7 +166,7 @@ export function PostsQuery(props) {
 
   const dataEl = data ? (
     <div className="data-box">
-      <h3>Data for Posts <LocationNote location={'Posts.js:<PostsQuery>'} /></h3>
+      <h3>Data for Posts <LocationNote /></h3>
       <pre>{stringifyRelayData(data)}</pre>
     </div>
   ) : null;
