@@ -4,7 +4,7 @@ import React, {Suspense} from 'react';
 import {ErrorBoundary} from "react-error-boundary";
 import {useLazyLoadQuery} from 'react-relay/hooks';
 import { auth } from './Config';
-import {ErrorFallback, stringifyRelayData, updateFormVariables} from './utils';
+import {ErrorFallback, stringifyRelayData, LocationNote, updateFormVariables} from './utils';
 import graphql from 'babel-plugin-relay/macro';
 import {createPaginationContainer} from 'react-relay';
 import Comment from './Comment'
