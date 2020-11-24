@@ -45,9 +45,9 @@ export function PaginatedRepositoryIssues(props) {
 export const PaginatedRepositoryIssuesContainer = createPaginationContainer(
   PaginatedRepositoryIssues,
   {
-    repositoryForPaginatedIssues: graphql`fragment Posts_repositoryForPaginatedIssues on GitHubRepository @argumentDefinitions(count: {type: "Int", defaultValue: 10}, cursor: {type: "String"}, labels: {type: "[String!]"}) {
+    repositoryForPaginatedIssues: graphql`fragment Posts_repositoryForPaginatedIssues on GitHubRepository @argumentDefinitions(count: {type: "Int", defaultValue: 10}, cursor: {type: "String"}, labels: {type: "[String!]"}, createdBy: {type: "String"}) {
   id
-  posts: issues(first: $count, orderBy: {field: CREATED_AT, direction: DESC}, labels: $labels, after: $cursor) @connection(key: "Posts_repositoryForPaginatedIssues_posts") {
+  posts: issues(first: $count, orderBy: {field: CREATED_AT, direction: DESC}, labels: $labels, filterBy: {createdBy: $createdBy}, after: $cursor) @connection(key: "Posts_repositoryForPaginatedIssues_posts") {
     edges {
       post: node {
         id
@@ -71,10 +71,10 @@ export const PaginatedRepositoryIssuesContainer = createPaginationContainer(
       const {count, cursor} = pagination;
       return {...fragmentVariables, count: count, cursor: cursor, oneGraphId: props?.repositoryForPaginatedIssues?.oneGraphId};
     },
-    query: graphql`query Posts_PaginatedRepositoryIssuesContainerQuery($oneGraphId: ID!, $labels: [String!] = ["Publish"], $count: Int = 10, $cursor: String) {
+    query: graphql`query Posts_PaginatedRepositoryIssuesContainerQuery($oneGraphId: ID!, $labels: [String!] = ["Publish"], $createdBy: String = "sgrove", $count: Int = 10, $cursor: String) {
   oneGraphNode(oneGraphId: $oneGraphId) {
     oneGraphId
-    ...Posts_repositoryForPaginatedIssues @arguments(count: $count, cursor: $cursor, labels: $labels)
+    ...Posts_repositoryForPaginatedIssues @arguments(count: $count, cursor: $cursor, labels: $labels, createdBy: $createdBy)
   }
 }`
   }
@@ -146,10 +146,10 @@ export const PaginatedIssuesCommentsContainer = createPaginationContainer(
 );
 
 const POSTS_QUERY = graphql`
-  query PostsQuery($name: String = "essay.dev", $owner: String = "onegraph", $labels: [String!] = ["Publish"]) {
+  query PostsQuery($name: String = "essay.dev", $owner: String = "onegraph", $labels: [String!] = ["Publish"], $createdBy: String = "sgrove") {
     gitHub {
       repository(name: $name, owner: $owner) {
-        ...Posts_repositoryForPaginatedIssues @arguments(labels: $labels)
+        ...Posts_repositoryForPaginatedIssues @arguments(labels: $labels, createdBy: $createdBy)
       }
     }
   }
@@ -192,6 +192,7 @@ export default function PostsQueryForm(props) {
     <label htmlFor="name">name</label><input id="name" type="text" onChange={updateFormVariables(setFormVariables, ["name"], (value) => value)} />
     <label htmlFor="owner">owner</label><input id="owner" type="text" onChange={updateFormVariables(setFormVariables, ["owner"], (value) => value)} />
     <label htmlFor="labels-0">labels</label><input id="labels-0" type="text" onChange={updateFormVariables(setFormVariables, ["labels",0], (value) => value)} />
+    <label htmlFor="createdBy">createdBy</label><input id="createdBy" type="text" onChange={updateFormVariables(setFormVariables, ["createdBy"], (value) => value)} />
     <input type="submit" />
   </form>
   );
