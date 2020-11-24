@@ -4,7 +4,7 @@ import React from 'react';
 import graphql from 'babel-plugin-relay/macro';
 import {auth} from './Config';
 import {useMutation} from 'react-relay/hooks';
-import {stringifyRelayData, suggestCORSSetup, updateFormVariables} from "./utils";
+import {stringifyRelayData, suggestCORSSetup, LocationNote, updateFormVariables} from "./utils";
 import Comment from './Comment'
 
 

@@ -4,7 +4,7 @@ import React, {useMemo} from 'react';
 import graphql from 'babel-plugin-relay/macro';
 import {useSubscription} from 'react-relay/hooks';
 import {auth} from './Config';
-import {stringifyRelayData, suggestCORSSetup, updateFormVariables} from './utils';
+import {stringifyRelayData, suggestCORSSetup, LocationNote, updateFormVariables} from './utils';
 import Comment from './Comment'
 
 const COMMENT_NOTIFICATION_SUBSCRIPTION = graphql`
