@@ -14,7 +14,7 @@ export function PaginatedRepositoryIssues(props) {
   const {relay, repositoryForPaginatedIssues} = props;
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const paginatedRepositoryIssuesUses = repositoryForPaginatedIssues?.issues?.edges?.map((item, idx) => <PaginatedIssuesCommentsContainer key={item?.post?.id || idx} issuesForPaginatedComments={item?.post} />);
+  const paginatedRepositoryIssuesUses = repositoryForPaginatedIssues?.issues?.edges?.map((item, idx) => <PaginatedIssuesCommentsContainer key={item?.node?.id || idx} issuesForPaginatedComments={item?.node} />);
 
   const loadMoreCount = 2;
 
@@ -49,7 +49,7 @@ export const PaginatedRepositoryIssuesContainer = createPaginationContainer(
   id
   issues(first: $count, orderBy: {field: CREATED_AT, direction: DESC}, labels: $labels, after: $cursor) @connection(key: "Posts_repositoryForPaginatedIssues_issues") {
     edges {
-      post: node {
+      node {
         id
         number
         title
@@ -71,7 +71,7 @@ export const PaginatedRepositoryIssuesContainer = createPaginationContainer(
       const {count, cursor} = pagination;
       return {...fragmentVariables, count: count, cursor: cursor, oneGraphId: props?.repositoryForPaginatedIssues?.oneGraphId};
     },
-    query: graphql`query Posts_PaginatedRepositoryIssuesContainerQuery($oneGraphId: ID!, $labels: [String!]!, $count: Int = 10, $cursor: String) {
+    query: graphql`query Posts_PaginatedRepositoryIssuesContainerQuery($oneGraphId: ID!, $labels: [String!] = ["Publish"], $count: Int = 10, $cursor: String) {
   oneGraphNode(oneGraphId: $oneGraphId) {
     oneGraphId
     ...Posts_repositoryForPaginatedIssues @arguments(count: $count, cursor: $cursor, labels: $labels)
@@ -146,7 +146,7 @@ export const PaginatedIssuesCommentsContainer = createPaginationContainer(
 );
 
 const POSTS_QUERY = graphql`
-  query Posts_Query($name: String = "essay.dev", $owner: String = "onegraph", $labels: [String!]!) {
+  query Posts_Query($name: String = "essay.dev", $owner: String = "onegraph", $labels: [String!] = ["Publish"]) {
     gitHub {
       repository(name: $name, owner: $owner) {
         ...Posts_repositoryForPaginatedIssues @arguments(labels: $labels)
@@ -191,7 +191,7 @@ export default function PostsQueryForm(props) {
   <form onSubmit={event => { event.preventDefault(); setQueryVariables({ ...formVariables }) }}>
     <label htmlFor="name">name</label><input id="name" type="text" onChange={updateFormVariables(setFormVariables, ["name"], (value) => value)} />
     <label htmlFor="owner">owner</label><input id="owner" type="text" onChange={updateFormVariables(setFormVariables, ["owner"], (value) => value)} />
-    <label htmlFor="labels">labels</label><input id="labels" type="text" onChange={updateFormVariables(setFormVariables, ["labels"], (value) => value)} />
+    <label htmlFor="labels-0">labels</label><input id="labels-0" type="text" onChange={updateFormVariables(setFormVariables, ["labels",0], (value) => value)} />
     <input type="submit" />
   </form>
   );
