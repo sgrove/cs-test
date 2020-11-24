@@ -14,14 +14,14 @@ export function PaginatedRepositoryIssues(props) {
   const {relay, repositoryForPaginatedIssues} = props;
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const paginatedRepositoryIssuesUses = repositoryForPaginatedIssues?.issues?.edges?.map((item, idx) => <PaginatedIssuesCommentsContainer key={item?.node?.id || idx} issuesForPaginatedComments={item?.node} />);
+  const paginatedRepositoryIssuesUses = repositoryForPaginatedIssues?.posts?.edges?.map((item, idx) => <PaginatedIssuesCommentsContainer key={item?.post?.id || idx} issuesForPaginatedComments={item?.post} />);
 
   const loadMoreCount = 2;
 
   return (
     <div>
       <div className="data-box">
-        <pre>{stringifyRelayData(repositoryForPaginatedIssues?.issues)}</pre>
+        <pre>{stringifyRelayData(repositoryForPaginatedIssues?.posts)}</pre>
         <h4>IssuesForPaginatedCommentsUses</h4>
         {issuesForPaginatedCommentsUses}
       </div>
@@ -36,7 +36,7 @@ export function PaginatedRepositoryIssues(props) {
             });
           }
         }}>
-        {isLoading ? 'Loading more issues...' :  relay.hasMore() ? `Fetch ${loadMoreCount} more issues` : "All issues have been fetched"}
+        {isLoading ? 'Loading more posts...' :  relay.hasMore() ? `Fetch ${loadMoreCount} more posts` : "All posts have been fetched"}
       </button>
     </div>
   );
@@ -47,9 +47,9 @@ export const PaginatedRepositoryIssuesContainer = createPaginationContainer(
   {
     repositoryForPaginatedIssues: graphql`fragment Posts_repositoryForPaginatedIssues on GitHubRepository @argumentDefinitions(count: {type: "Int", defaultValue: 10}, cursor: {type: "String"}, labels: {type: "[String!]"}) {
   id
-  issues(first: $count, orderBy: {field: CREATED_AT, direction: DESC}, labels: $labels, after: $cursor) @connection(key: "Posts_repositoryForPaginatedIssues_issues") {
+  posts: issues(first: $count, orderBy: {field: CREATED_AT, direction: DESC}, labels: $labels, after: $cursor) @connection(key: "Posts_repositoryForPaginatedIssues_posts") {
     edges {
-      node {
+      post: node {
         id
         number
         title
@@ -65,7 +65,7 @@ export const PaginatedRepositoryIssuesContainer = createPaginationContainer(
   {
     direction: 'forward',
     getConnectionFromProps(props) {
-      return props?.repositoryForPaginatedIssues?.issues;
+      return props?.repositoryForPaginatedIssues?.posts;
     },
     getVariables(props, pagination, fragmentVariables) {
       const {count, cursor} = pagination;
