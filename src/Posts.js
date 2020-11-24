@@ -146,7 +146,7 @@ export const PaginatedIssuesCommentsContainer = createPaginationContainer(
 );
 
 const POSTS_QUERY = graphql`
-  query Posts_Query($name: String = "essay.dev", $owner: String = "onegraph", $labels: [String!] = ["Publish"]) {
+  query PostsQuery($name: String = "essay.dev", $owner: String = "onegraph", $labels: [String!] = ["Publish"]) {
     gitHub {
       repository(name: $name, owner: $owner) {
         ...Posts_repositoryForPaginatedIssues @arguments(labels: $labels)
@@ -166,7 +166,7 @@ export function PostsQuery(props) {
 
   const dataEl = data ? (
     <div className="data-box">
-      <h3>Data for Posts <LocationNote location={'Posts.js:<Posts>'} /></h3>
+      <h3>Data for Posts <LocationNote location={'Posts.js:<PostsQuery>'} /></h3>
       <pre>{stringifyRelayData(data)}</pre>
     </div>
   ) : null;
